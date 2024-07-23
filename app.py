@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 import pandas as pd
 import requests
@@ -27,7 +28,7 @@ def upload_file():
 
     if file:
         df = pd.read_csv(file)
-        api_key = 'YOUR_OPENCAGE_API_KEY'
+        api_key = os.getenv('OPENCAGE_API_KEY')
         df['Latitude'], df['Longitude'] = zip(*df['Place'].apply(lambda x: get_coordinates(x, api_key)))
         result = df.to_dict(orient='records')
         return jsonify(result)
